@@ -17,6 +17,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+// represents a Controller role in MVC pattern , creates ClientHAndler objects, manipulates its methods
+// (MVC is not complete becouse Server still doesn`t controls (updates) view.
 
 public class Server {
     private final int PORT = 8189;
@@ -27,19 +29,9 @@ public class Server {
     public AuthService getAuthService() {
         return authService;
     }
-//    private Vector<ClientsHandler> clients;
+
 
     public Server() {
-//        Method[] meth = BaseAuthService.class.getDeclaredMethods();
-//        for (Method o: meth) {
-//            if (o.getName().equals("start")) {
-//                try {
-//                    o.invoke(getAuthService());
-//                } catch (IllegalAccessException | InvocationTargetException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
 
 
         ServerSocket server = null;
@@ -52,11 +44,11 @@ public class Server {
     authService.start();
 
         try {
-            server = new ServerSocket(PORT);
+            server = new ServerSocket(PORT);      //creating server socket listening for the clients and connecting to them
             System.out.println("Server is up...");
 
             while (true) {
-                socket = server.accept(); //режим ожидания, возвращает объект типа сокет, блокирует выполнение кода
+                socket = server.accept();         // stand by mode, waiting for client`s action
 
                 System.out.println("Client has connected successfully...");
                 new ClientHandler(socket,this);
@@ -69,49 +61,21 @@ public class Server {
             try {
                 authService.stop();
                 socket.close();
-                server.close();
+                server.close();             //closing server connection(all the clients will be dropped as well)
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-//    public void getPriivateConversation(ClientHandler c0,  String nick, String msg) {
-//int i = 0;
-//       for (ClientHandler c: clients) {
-//           if (c.getName().equals(nick)) {
-//               c.
-//           c0.sendServerMessage(msg);
-//           }
-//       }
-//    }
-//    public void privateMulticast(String msg) {
-//        for (int i = 0; i < privates.size(); i++) {
-//            for (int j = 0; j < privates.get(i).size(); j++) {
-//                privates.get(i).get(j).sendServerMessage(msg);
-//
-//            }
-//        }
-//    }
-//    public void timerSchedule(ClientHandler c) {
-//        t.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//
-//
-//
-//
-//        },120000);
-//
-//
-//    }
-public  synchronized void broadCast(String msg) {
+
+public  synchronized void broadCast(String msg) { // broadcast message too all clients
         for (ClientHandler c:clients) {
             c.sendServerMessage(msg);
         }
 
 }
-public void broadCastUserList() {
+public void broadCastUserList() {            //updating userlist panel at the right side of the window, broadcast message
         StringBuffer stg = new StringBuffer("/usersList");
 
         for (ClientHandler c:clients) {
@@ -125,7 +89,7 @@ public void broadCastUserList() {
 
 
 }
-public  ClientHandler match(String nick) {
+public  ClientHandler match(String nick) {         //checking by nickname for sending private messages
     for (ClientHandler o : clients) {
         if (o.getName().equals(nick)) {
             return o;
@@ -153,18 +117,7 @@ public synchronized void unsubscribeMe(ClientHandler c) {
 
 }
 
-//    public void broadcast(String msg){
-//        for(ClientHandler c: clients){
-//            c.sendMessage(msg);
-//        }
-//    }
-//    public void subscribeMe(ClientsHandler c){
-//        clients.add(c);
-//    }
-//    public void unsubscribeMe(ClientHandler c){
-//        clients.remove(c);
-//    }
-//}
+
 
 
 

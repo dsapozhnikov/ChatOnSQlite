@@ -1,14 +1,10 @@
 package com.server;
 
 
-import java.lang.reflect.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 
-public class BaseAuthService implements AuthService {
+public class BaseAuthService implements AuthService { // creating service for authentication
 
     private class Entry {
         private String login;
@@ -32,20 +28,9 @@ public class BaseAuthService implements AuthService {
 
     }
 
-    public BaseAuthService() {
-
-        entries = new ArrayList<>();
-       entries.add(new Entry("login1","pass1","nick1"));
-       entries.add(new Entry("login2","pass2","nick2"));
-       entries.add(new Entry("login3","pass3","nick3"));
-
-    }
-
-
-
 
     @Override
-    public String getNickByLoginPass(String login, String pass) {
+    public String getNickByLoginPass(String login, String pass) {       // simply making login==nickname :)
         for (Entry e:entries) {
             if (e.login.equals(login) && e.pass.equals(pass)) {
                 return e.nick;

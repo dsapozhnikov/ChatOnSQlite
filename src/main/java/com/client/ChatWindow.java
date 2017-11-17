@@ -36,7 +36,7 @@ public class ChatWindow extends JFrame {
         if (!b)JOptionPane.showMessageDialog(dialog,"Login or passwort is incorrect!","invalid input!",JOptionPane.WARNING_MESSAGE);
 
     }
-    public void setAuthorized(boolean b) {
+    public void setAuthorized(boolean b) {           // setting panel visible/invisible depending on whther user is authorized
         isAuthorized = b;
         upperPanel.setVisible(!isAuthorized);
         inputArea.setVisible(isAuthorized);
@@ -45,7 +45,7 @@ public class ChatWindow extends JFrame {
         jtsUsers.setVisible(isAuthorized);
 
     }
-    public ChatWindow() {
+    public ChatWindow() {                       // creating chat window on swing ( creating all the interface elements
 
         setTitle("Chat");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -64,18 +64,18 @@ public class ChatWindow extends JFrame {
 
 
 
-        JPanel jpanel = new JPanel();
+        JPanel jpanel = new JPanel();                      //enabling scrolling by adding scroll panel
         inputArea = new JTextArea();
         scrollInputPane = new JScrollPane(inputArea);
 
         upperPanel = new JPanel(new GridLayout(1,1));
         nickpanel = new JPanel();
 
-        JTextField login = new JTextField();
+        JTextField login = new JTextField();                    // adding login panel
         JPasswordField passwordField = new JPasswordField();
         JButton auth = new JButton("Login");
 
-        auth.addActionListener(new ActionListener() {
+        auth.addActionListener(new ActionListener() {              // assigning action listener to password field
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -114,7 +114,7 @@ public class ChatWindow extends JFrame {
 //        jb1.setBackground(Color.WHITE);
   //      jb1.setOpaque(true);
 
-        JMenuBar jMenuBar = new JMenuBar();
+        JMenuBar jMenuBar = new JMenuBar();        // adding menu bar (NOT FUNCTIONAL YET!) p.s will be in the next release :)
         JMenu mSignUp = new JMenu("SignUp");
         JMenu mFile = new JMenu("File");
         JMenu mEdit = new JMenu("Edit");
@@ -172,7 +172,7 @@ public class ChatWindow extends JFrame {
         inputArea.setFont(font);
         textArea.setFont(font);
 
-            try {
+            try {                                                 // establishing connection with server
                 socket=new Socket("localhost",8189);
                 in =new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
@@ -186,7 +186,7 @@ public class ChatWindow extends JFrame {
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {                 // enabling key ENTER also functional for sending messages
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                    // textArea.append(inputArea.getText()+"\n");
                     String msg  = inputArea.getText().trim();
@@ -219,7 +219,7 @@ public class ChatWindow extends JFrame {
         add(scrollOutputPane,BorderLayout.CENTER);
 
         add(jpanel,BorderLayout.SOUTH);
-        Thread t1 =new Thread(() ->{
+        Thread t1 =new Thread(() ->{                 // creating a thread for handling timeout option and authentication option (if not auth in 2 mins , timeout happens)
 
                 try {
                     while (true) {
@@ -240,7 +240,7 @@ public class ChatWindow extends JFrame {
 
                     while (true) {
                         String msg  =  in.readUTF();
-                        if (msg.startsWith("/")) {
+                        if (msg.startsWith("/")) {                  // separating service messaages by determining them with "/" sign
                             if (msg.startsWith("/usersList")) {
                                 String[] users = msg.split("\\s");
                                 jtaUsers.setText("");
@@ -252,7 +252,7 @@ public class ChatWindow extends JFrame {
                             }
                         }
 
-                      else textArea.append(msg+"\n");
+                      else textArea.append(msg+"\n");                      // appending a user message to a textarea
                         textArea.setCaretPosition(textArea.getDocument().getLength());
 
                     }
@@ -280,7 +280,7 @@ public class ChatWindow extends JFrame {
             public void windowClosing(WindowEvent e) {
                 try {
                     super.windowClosing(e);
-                    out.writeUTF("/end");
+                    out.writeUTF("/end");             //closing connection by sending "end" message and closing socket itself
                     socket.close();
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -292,7 +292,7 @@ public class ChatWindow extends JFrame {
         setVisible(true);
 
     }
-    public void sendMessage(String msg) {
+    public void sendMessage(String msg) {      //enabling sending messages to server
 
         try {
             out.writeUTF(msg);

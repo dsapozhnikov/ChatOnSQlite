@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.Timer;
 
-public class ClientHandler {
+public class ClientHandler {            //represents a Model in MVC
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
@@ -47,7 +47,7 @@ public class ClientHandler {
             });
             t1.start();
 
-            new Thread(()-> { //authentication
+            new Thread(()-> {       //authentication
             try {
             while (true) {
 
@@ -56,7 +56,7 @@ public class ClientHandler {
                    if (SQL.checkIfUserExistsInDb(elements[0],elements[1])) {
                        ChatWindow.jOptionPopUp(true);
                        nick=elements[0];
-                       sendServerMessage("/authok "+nick);
+                       sendServerMessage("/authok "+nick);      // confirmation of successful auth.
                        name=nick;
                        server.broadCast(name+" entered the chat");
                        server.subsribeMe(this);
@@ -97,7 +97,7 @@ public class ClientHandler {
                 }finally {
 
                         server.unsubscribeMe(this);
-                server.broadCast(   name!=""?name+"вышел из чата":"");
+                server.broadCast(   name!=""?name+"left chat":"");
                 try {
                     socket.close();
                     } catch (IOException e) {

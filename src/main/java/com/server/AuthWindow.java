@@ -1,5 +1,7 @@
 package com.server;
-
+/*
+ Creating auth window for user sign  up
+ */
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
